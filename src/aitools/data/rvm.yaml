@@ -1,0 +1,14 @@
+variant: mobilenetv3
+device: cuda
+input_source: "input.mp4"
+output_type: video
+seq_chunk: 1
+    # --checkpoint "CHECKPOINT" \
+    # --device cuda \
+    # --input-source "input.mp4" \
+    # --output-type video \
+    # --output-composition "composition.mp4" \
+    # --output-alpha "alpha.mp4" \
+    # --output-foreground "foreground.mp4" \
+    # --output-video-mbps 4 \
+    # --seq-chunk 1
