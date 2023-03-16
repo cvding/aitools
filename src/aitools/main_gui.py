@@ -1,10 +1,11 @@
 import streamlit as st
 from time import sleep
 import torch
+from rvm import convert_image
 
 def load_model(outputs):
     with st.spinner("Loading model..."):
-        model = torch.hub.load("PeterL1n/RobustVideoMatting", "mobilenetv3")
+        model = torch.hub.load("PeterL1n/RobustVideoMatting", "resnet50")
         convert_video = torch.hub.load("PeterL1n/RobustVideoMatting", "converter")
         st.session_state['rvm'] = {'model': model, 'func': convert_video}
 
@@ -20,7 +21,7 @@ class Main:
             left_col, right_col = st.columns(2)
             with left_col:
                 st.selectbox('backbone',['mobilenetv3', 'resnet50'])
-                st.selectbox('output-type', ['video', 'image'])
+                st.selectbox('output-type', ['video', 'image'], )
 
                 if uploaded_file is not None:
                     bytes_data = uploaded_file.getvalue()
@@ -29,11 +30,12 @@ class Main:
                 st.selectbox('device', ['cuda', 'cpu'])
                 st.number_input('seq_chunk', min_value=1, value=1, format='%d')
                 if uploaded_file is not None:
-                    st.session_state['rvm']['convert_video']()
-                    for i in range(100):
-                        sleep(0.05)
-                        my_bar.progress(i+1)
-                    st.image(bytes_data)
+                    convert_image(st.session_state['rvm']['model'], bytes_data, output_composition=True)
+                    # st.session_state['rvm']['convert_video']
+                    # for i in range(100):
+                    #     sleep(0.05)
+                    #     my_bar.progress(i+1)
+                    st.image('comp.png')
 
             lc, rc = st.columns([0.8, 0.2])
             with lc:
